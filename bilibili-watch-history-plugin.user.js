@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         bilibili-watch-history-plugin
 // @namespace    https://github.com/putlx/scripts/blob/master/bilibili-watch-history-plugin.user.js
-// @version      0.4.0
+// @version      0.4.1
 // @author       putlx
 // @downloadURL  https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
 // @updateURL    https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
 // @include      /^https?:\/\/www\.bilibili\.com\/account\/history/
-// @require      https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.4.0/dist/worker.sql-wasm.js
-// @require      https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.js
-// @require      https://echarts-www.cdn.bcebos.com/zh/asset/theme/infographic.js?_v_=20200710_1
+// @require      https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.4.0/dist/worker.sql-wasm.min.js
+// @require      https://cdn.jsdelivr.net/npm/echarts@5.0.2/dist/echarts.min.js
 // ==/UserScript==
 
 (function () {
@@ -162,7 +161,7 @@
             let option = {
                 title: { left: "center" },
                 legend: { data: ["观看时长", "观看视频数量"], top: "6%" },
-                tooltip: { trigger: "axis", axisPointer: { type: "cross", crossStyle: { color: "#999" } } },
+                tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
                 dataset: { dimensions: [null, { name: "观看时长", type: "float" }, { name: "观看视频数量", type: "int" }] },
                 xAxis: {
                     type: "category", axisPointer: { type: "shadow" }, axisLabel: {
@@ -225,7 +224,7 @@
                 `SELECT tname, round(CAST(SUM(progress) AS REAL) / 3600) AS t, COUNT(tname)
                 FROM history INNER JOIN types ON history.tid = types.tid
                 GROUP BY tname ORDER BY t DESC LIMIT 12`);
-            let chart = echarts.init(charts.childNodes[0], "infographic", { renderer: "svg" });
+            let chart = echarts.init(charts.childNodes[0], { renderer: "svg" });
             chart.setOption(option);
 
             option.title.text = "视频投稿者";
@@ -234,7 +233,7 @@
                 `SELECT mname, round(CAST(SUM(progress) AS REAL) / 3600) AS t, COUNT(mname), history.mid
                 FROM history INNER JOIN users ON history.mid = users.mid
                 GROUP BY history.mid ORDER BY t DESC LIMIT 12`);
-            chart = echarts.init(charts.childNodes[1], "infographic", { renderer: "svg" });
+            chart = echarts.init(charts.childNodes[1], { renderer: "svg" });
             chart.setOption(option);
             chart.on("click", "series", evt => setUserView(evt.data[3], evt.data[0]));
             chart.on("click", "xAxis", evt => {
@@ -260,18 +259,18 @@
                 `SELECT STRFTIME('%H:00', view_at, 'unixepoch', 'localtime') AS t,
                 round(CAST(SUM(progress) AS REAL) / 3600)
                 FROM history GROUP BY t ORDER BY t`)[0].values;
-            chart = echarts.init(charts.childNodes[4], "infographic", { renderer: "svg" });
+            chart = echarts.init(charts.childNodes[4], { renderer: "svg" });
             chart.setOption(option);
 
             option = {
-                tooltip: { trigger: "axis", axisPointer: { type: "cross", crossStyle: { color: "#999" } } },
+                tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
                 title: { left: "center" },
                 dataset: {},
                 xAxis: [{ type: "time" }],
                 yAxis: [{ name: "观看时长", axisLabel: { formatter: "{value} h" } }],
                 series: [{ type: "bar" }]
             };
-            let userView = echarts.init(charts.childNodes[2], "infographic", { renderer: "svg" });
+            let userView = echarts.init(charts.childNodes[2], { renderer: "svg" });
             function setUserView(mid, manme) {
                 option.title.text = manme + " 的视频的观看时长";
                 option.title.subtext = "点击上方统计表的柱条来切换投稿者";
@@ -286,7 +285,7 @@
             }
             setUserView(dataset[0][3], dataset[0][0]);
 
-            chart = echarts.init(charts.childNodes[3], "infographic", { renderer: "svg" });
+            chart = echarts.init(charts.childNodes[3], { renderer: "svg" });
             chart.setOption({
                 title: { text: "观看设备", left: "center" },
                 tooltip: {
@@ -308,7 +307,7 @@
                 FROM history GROUP BY t`)[0].values;
             if (!option.dataset.source.some(data => data[0] === lastDay))
                 option.dataset.source.push([lastDay, 0]);
-            chart = echarts.init(charts.childNodes[5], "infographic", { renderer: "svg" });
+            chart = echarts.init(charts.childNodes[5], { renderer: "svg" });
             chart.setOption(option);
         };
     });
