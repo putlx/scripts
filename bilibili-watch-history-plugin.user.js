@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         bilibili-watch-history-plugin
 // @namespace    https://github.com/putlx/scripts/blob/master/bilibili-watch-history-plugin.user.js
-// @version      0.4.1
+// @version      0.4.2
 // @author       putlx
 // @downloadURL  https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
 // @updateURL    https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
@@ -67,6 +67,9 @@
             let onclick = download.onclick;
             download.onclick = undefined;
             download.setAttribute("style", "color: gray; background-color: white; cursor: wait;");
+            let progress = document.querySelector("#app > div")
+                .insertBefore(document.createElement("div"), document.querySelector("#app > div > div:nth-child(2)"));
+            progress.setAttribute("style", "text-align: center; margin: 0.5em;");
 
             let lastTime = 0;
             if (db) {
@@ -117,10 +120,12 @@
                             [h.aid, h.owner.mid, h.tid, h.progress === -1 ? h.duration : h.progress, h.view_at, h.device]
                         );
                         count++;
+                        progress.innerText = `[Downloading] ${count} / ?`;
                     }
                     if (!finished)
                         return request(i + 1);
 
+                    progress.innerText = `[Finished] ${count} / ${count}`;
                     db.run("INSERT INTO download VALUES (?, ?)", [startTime, count]);
                     if (failbit)
                         alert("Fail to fetch some records. See console for details.");
