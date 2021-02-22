@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         bilibili-watch-history-plugin
 // @namespace    https://github.com/putlx/scripts/blob/master/bilibili-watch-history-plugin.user.js
-// @version      0.4.2
+// @version      0.4.3
 // @author       putlx
 // @downloadURL  https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
 // @updateURL    https://github.com/putlx/scripts/raw/master/bilibili-watch-history-plugin.user.js
@@ -13,25 +13,25 @@
 (function () {
     "use strict";
 
-    let panel = document.querySelector("#app > div > div.newlist_info > div")
-        .appendChild(document.createElement("div"));
-    panel.className = "history-btn";
-    panel.style.width = "350px";
-    let input = panel.appendChild(document.createElement("a"));
+    let panel = document.querySelector("#app > div > div.newlist_info > div > div.history-btn");
+    panel.style.width = "550px";
+    panel.previousElementSibling.style.marginRight = "360px";
+    let input = panel.insertBefore(document.createElement("a"), panel.children[0]);
     input.href = "#";
     input.className = "btn";
     input.style.padding = "2px";
+    input.style.paddingBottom = "8px";
     input.innerHTML = '<input type="file" accept=".db">';
     input = input.querySelector("input");
     input.style.width = "150px";
     input.style.fontSize = "inherit";
     input.style.outline = "none";
-    let analyze = panel.appendChild(document.createElement("a"));
+    let analyze = panel.insertBefore(document.createElement("a"), panel.children[0]);
     analyze.href = "#";
     analyze.className = "btn";
     analyze.innerHTML = "分析记录";
     analyze.setAttribute("style", "color: gray; background-color: white; cursor: not-allowed;");
-    let download = panel.appendChild(document.createElement("a"));
+    let download = panel.insertBefore(document.createElement("a"), panel.children[0]);
     download.href = "#";
     download.className = "btn";
     download.innerHTML = "下载记录";
