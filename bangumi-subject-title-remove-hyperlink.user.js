@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         bangumi-subject-title-remove-hyperlink
 // @namespace    https://github.com/putlx/scripts/blob/master/bangumi-subject-title-remove-hyperlink.user.js
-// @version      0.2.1
+// @version      0.2.2
 // @author       putlx
 // @downloadURL  https://github.com/putlx/scripts/raw/master/bangumi-subject-title-remove-hyperlink.user.js
 // @updateURL    https://github.com/putlx/scripts/raw/master/bangumi-subject-title-remove-hyperlink.user.js
-// @include      /^https?:\/\/(bgm\.tv|bangumi\.tv|chii\.in)\/(subject|ep)\/\d+/
+// @include      /^https?:\/\/(bgm\.tv|bangumi\.tv|chii\.in)\/(subject|ep|person)\/\d+/
 // @grant        GM_addStyle
 // ==/UserScript==
 
